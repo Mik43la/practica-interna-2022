@@ -1,0 +1,91 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+model User {
+  id Int @default(autoincrement())
+  username String @unique @id
+  email String @unique
+  name String
+  code String @unique
+  password String 
+  rolename String
+  deactivationTime DateTime?
+  role Role @relation(fields: [rolename], references: [name])
+  courses Course[]
+  careers Career[]
+  
+  @@map("users")
+}
+
+model Career {
+  id Int @id @default(autoincrement())
+  name String
+  facultyHeadUsername String
+  facultyHead User @relation(fields: [facultyHeadUsername], references: [username]) 
+  courses CareersForCourse[]
+
+  
+  @@map("careers")
+}
+model Course {
+  id Int @default(autoincrement())
+  name String
+  startTerm Int
+  endTerm Int
+  schedule String
+  lecturer String 
+  credits Int
+  ownerUsername String
+  owner User @relation(fields:[ownerUsername], references:[username])
+  careers CareersForCourse[]
+  seasonName String
+  season Season @relation(fields: [seasonName], references: [name])
+   @@id([lecturer,schedule,startTerm, seasonName]) 
+
+  
+  @@map("courses")
+
+}
+
+
+
+model CareersForCourse {
+  courseLecturer String
+  courseSchedule String
+  courseSeason String
+  courseStartTerm Int
+  Course       Course     @relation(fields: [courseLecturer, courseSchedule, courseStartTerm, courseSeason], references: [lecturer,schedule,startTerm, seasonName])
+  careerId Int
+  Career   Career @relation(fields: [careerId], references: [id])
+  @@id([courseLecturer, courseSchedule, careerId])
+
+  
+  @@map("careers_for_course")
+}
+
+
+
+model Role {
+  id Int @default(autoincrement())
+  name String @id
+  users User[]
+  
+  @@map("roles")
+}
+  
+model Season {
+  id Int @id @default(autoincrement())
+  name String @unique
+  courses Course[]
+
+  
+  @@map("seasons")
+}
