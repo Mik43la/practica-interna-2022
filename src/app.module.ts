@@ -9,9 +9,10 @@ import { CareerModule } from './career/career.module';
 import { RoleModule } from './role/role.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { SeasonModule } from './season/season.module';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
-  imports: [CourseModule, UserModule, AuthModule, CareerModule, RoleModule, PrismaModule, SeasonModule],
+  imports: [ConfigModule.forRoot({ isGlobal:true  }),CourseModule, UserModule, AuthModule, CareerModule, RoleModule, PrismaModule, SeasonModule],
   controllers: [AppController],
   providers: [AppService],
 })

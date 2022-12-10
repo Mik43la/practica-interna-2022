@@ -20,6 +20,7 @@ export class CourseService{
                 lecturer : dto.lecturer,
                 credits : parseInt(dto.credits.toString()),
                 ownerUsername : dto.ownerUsername,
+            
                 seasonName : dto.seasonName,
             },
         });

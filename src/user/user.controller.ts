@@ -1,7 +1,13 @@
-import { Controller, Delete, Body, Put, Get, Param, Post } from "@nestjs/common";
+import { Controller, Delete, Body, Put, Get, Param, Post, UseGuards, Req } from "@nestjs/common";
+import { AuthGuard } from "@nestjs/passport/dist";
 import { UpdateDto, UserDto } from "./dto";
 import { UserService } from "./user.service";
+import { Request } from 'express';
+import { JwtGuard } from "src/auth/guard";
+import { GetUser } from "src/auth/decorator";
+import { User } from "@prisma/client";
 
+@UseGuards(JwtGuard)
 @Controller('user')
 export class UserController{
     constructor(private userService: UserService) {}
@@ -24,6 +30,7 @@ export class UserController{
         return this.userService.findAll()
     }
 
+    
     @Get(':id')
     find(@Param('id') id) {
         return this.userService.find(id)
@@ -32,6 +39,16 @@ export class UserController{
     @Delete(':id')
     delete(@Param('id') id) {
         return this.userService.delete(id)
+    }
+
+    
+    @Get('aaa')
+    getMe(@GetUser() user: User,
+          @GetUser('username') username: string) {
+            console.log({
+                username,
+            });
+        return user;
     }
 }
 

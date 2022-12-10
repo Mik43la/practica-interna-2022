@@ -5,9 +5,13 @@ import * as argon from 'argon2'
 import { debugPort } from "process";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime";
 import { ForbiddenException } from '@nestjs/common/exceptions';
+import { JwtService } from "@nestjs/jwt/dist";
+import { ConfigService } from "@nestjs/config/dist/config.service";
 @Injectable()
 export class AuthService{
-    constructor(private prisma: PrismaService){}
+    constructor(private prisma: PrismaService,
+         private jwt: JwtService,
+         private config: ConfigService){}
 
     async signup(  dto:AuthDto) {
         const hash = await argon.hash(dto.password);
@@ -25,8 +29,7 @@ export class AuthService{
                 },
             });
              
-            delete user.password;
-            return user;
+            return this.signToken(user.rolename, user.username)
 
 
          } catch (error) {
@@ -71,7 +74,27 @@ export class AuthService{
                 'This user has been deactivated.',
             )
         }
-    delete user.password;
-    return user;
+    
+    return this.signToken(user.rolename, user.username)
+    }
+
+
+    async signToken(role: string, username: string ): Promise<{access_token: string}> {
+        const payload =  {
+            sub: role,
+            username,
+        };
+
+        const secret  = this.config.get('JWT_SECRET')
+
+
+        const token= await  this.jwt.signAsync(payload, {
+            expiresIn: '15m',
+            secret: secret,
+        })
+
+        return {
+            access_token: token,
+        }
     }
 }
