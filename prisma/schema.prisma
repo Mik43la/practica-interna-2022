@@ -21,7 +21,7 @@ model User {
   role Role @relation(fields: [rolename], references: [name])
   courses Course[]
   careers Career[]
-  
+  studentCourses StudentCourses[]
   @@map("users")
 }
 
@@ -48,6 +48,8 @@ model Course {
   careers CareersForCourse[]
   seasonName String
   season Season @relation(fields: [seasonName], references: [name])
+
+  studentCourses StudentCourses[]
    @@id([lecturer,schedule,startTerm, seasonName]) 
 
   
@@ -65,10 +67,22 @@ model CareersForCourse {
   Course       Course     @relation(fields: [courseLecturer, courseSchedule, courseStartTerm, courseSeason], references: [lecturer,schedule,startTerm, seasonName])
   careerId Int
   Career   Career @relation(fields: [careerId], references: [id])
-  @@id([courseLecturer, courseSchedule, careerId])
+  @@id([courseLecturer, courseSchedule, courseStartTerm, courseSeason, careerId])
 
   
   @@map("careers_for_course")
+}
+
+model StudentCourses {
+  studentCode String
+  courseLecturer String
+  courseSchedule String
+  courseSeason String
+  courseStartTerm Int
+  Course Course @relation(fields: [courseLecturer, courseSchedule,courseStartTerm, courseSeason], references: [lecturer,schedule,startTerm,seasonName])
+  Student User @relation(fields: [studentCode], references: [code])
+  @@id([studentCode,courseLecturer,courseSchedule,courseStartTerm,courseSeason])
+
 }
 
 
