@@ -16,9 +16,9 @@ model User {
   name String
   code String @unique
   password String 
-  rolename String
+  rolename String  @default("user")
   deactivationTime DateTime?
-  role Role @relation(fields: [rolename], references: [name])
+  role Role @relation(fields: [rolename], references: [name], onDelete:SetDefault, onUpdate: Cascade )
   courses Course[]
   careers Career[]
   studentCourses StudentCourses[]
@@ -29,7 +29,7 @@ model Career {
   id Int @id @default(autoincrement())
   name String
   facultyHeadUsername String
-  facultyHead User @relation(fields: [facultyHeadUsername], references: [username]) 
+  facultyHead User @relation(fields: [facultyHeadUsername], references: [username], onUpdate: Cascade ) 
   courses CareersForCourse[]
 
   
@@ -44,10 +44,10 @@ model Course {
   lecturer String 
   credits Int
   ownerUsername String
-  owner User @relation(fields:[ownerUsername], references:[username])
+  owner User @relation(fields:[ownerUsername], references:[username], onUpdate: Cascade )
   careers CareersForCourse[]
   seasonName String
-  season Season @relation(fields: [seasonName], references: [name])
+  season Season @relation(fields: [seasonName], references: [name] , onDelete: Cascade, onUpdate: Cascade )
 
   studentCourses StudentCourses[]
    @@id([lecturer,schedule,startTerm, seasonName]) 
@@ -64,9 +64,9 @@ model CareersForCourse {
   courseSchedule String
   courseSeason String
   courseStartTerm Int
-  Course       Course     @relation(fields: [courseLecturer, courseSchedule, courseStartTerm, courseSeason], references: [lecturer,schedule,startTerm, seasonName])
+  Course       Course     @relation(fields: [courseLecturer, courseSchedule, courseStartTerm, courseSeason], references: [lecturer,schedule,startTerm, seasonName], onDelete: Cascade , onUpdate: Cascade )
   careerId Int
-  Career   Career @relation(fields: [careerId], references: [id])
+  Career   Career @relation(fields: [careerId], references: [id], onDelete: Cascade, onUpdate: Cascade )
   @@id([courseLecturer, courseSchedule, courseStartTerm, courseSeason, careerId])
 
   
@@ -79,8 +79,8 @@ model StudentCourses {
   courseSchedule String
   courseSeason String
   courseStartTerm Int
-  Course Course @relation(fields: [courseLecturer, courseSchedule,courseStartTerm, courseSeason], references: [lecturer,schedule,startTerm,seasonName])
-  Student User @relation(fields: [studentCode], references: [code])
+  Course Course @relation(fields: [courseLecturer, courseSchedule,courseStartTerm, courseSeason], references: [lecturer,schedule,startTerm,seasonName], onDelete: Cascade, onUpdate: Cascade )
+  Student User @relation(fields: [studentCode], references: [code], onUpdate: Cascade )
   @@id([studentCode,courseLecturer,courseSchedule,courseStartTerm,courseSeason])
 
 }
