@@ -20,21 +20,34 @@ model User {
   deactivationTime DateTime?
   role Role @relation(fields: [rolename], references: [name], onDelete:SetDefault, onUpdate: Cascade )
   courses Course[]
-  careers Career[]
+  careerOfUser CareerOfUser[]
+  careers Career[] 
   studentCourses StudentCourses[]
   @@map("users")
 }
 
 model Career {
   id Int @id @default(autoincrement())
-  name String
+  name String @unique
   facultyHeadUsername String
   facultyHead User @relation(fields: [facultyHeadUsername], references: [username], onUpdate: Cascade ) 
   courses CareersForCourse[]
-
-  
+  careerOfUser CareerOfUser[]
   @@map("careers")
 }
+
+model CareerOfUser {
+  
+  id Int @default(autoincrement())
+  usercode String @unique
+  career Int @default(0)
+  careerName Career @relation(fields: [career], references: [id], onDelete: SetDefault, onUpdate: Cascade)
+  user User @relation(fields: [usercode], references: [code], onDelete: Cascade, onUpdate: Cascade)
+
+  @@id([usercode, career])
+  @@map("career_of_user")
+}
+
 model Course {
   id Int @default(autoincrement())
   name String
@@ -83,6 +96,7 @@ model StudentCourses {
   Student User @relation(fields: [studentCode], references: [code], onUpdate: Cascade )
   @@id([studentCode,courseLecturer,courseSchedule,courseStartTerm,courseSeason])
 
+  @@map("student_courses")
 }
 
 
