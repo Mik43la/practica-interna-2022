@@ -14,10 +14,7 @@ export class CareersForCourseService{
                 const careerForCourse=
                 await this.prisma.careersForCourse.create({
                     data: {
-                        courseLecturer: dto.courseLecturer,
-                        courseSchedule: dto.courseSchedule, 
-                        courseStartTerm: dto.courseStartTerm, 
-                        courseSeason: dto.courseSeason, 
+                        courseId: parseInt(dto.courseId.toString()),
                         careerId: parseInt(dto.careerId.toString())
                     },
                 });
@@ -37,16 +34,10 @@ export class CareersForCourseService{
             return this.prisma.careersForCourse.findMany({})
         }
 
-        findAllCareersOfOneCourse(lecturer: string,
-            schedule: string,
-             startTerm: number,
-              season: string){
+        findAllCareersOfOneCourse(idData: number){
                 return this.prisma.careersForCourse.findMany({
                     where:{
-                            courseLecturer: lecturer,
-                            courseSchedule: schedule,
-                            courseStartTerm: parseInt(startTerm.toString()),
-                            courseSeason :season
+                            courseId: parseInt(idData.toString())
                     }
                 })
               }
@@ -59,18 +50,12 @@ export class CareersForCourseService{
             })
         }
 
-        async delete(lecturer: string,
-             schedule: string,
-              startTerm: number,
-               season: string,
+        async delete(course:number,
                 career: number){
                     const careerForCourse = 
                     await this.prisma.careersForCourse.findMany({
                         where: {
-                            courseLecturer: lecturer,
-                            courseSchedule: schedule,
-                            courseStartTerm: parseInt(startTerm.toString()),
-                            courseSeason :season,
+                            courseId: parseInt(course.toString()),
                             careerId: parseInt(career.toString()),
                         },
                     });
@@ -83,10 +68,7 @@ export class CareersForCourseService{
 
                     return this.prisma.careersForCourse.deleteMany({
                         where:{
-                            courseLecturer: lecturer,
-                            courseSchedule: schedule,
-                            courseStartTerm: parseInt(startTerm.toString()),
-                            courseSeason :season,
+                            courseId: parseInt(course.toString()),
                             careerId: parseInt(career.toString()),
                         }
                     })

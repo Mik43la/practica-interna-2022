@@ -23,13 +23,10 @@ export class StudentCoursesController{
     }
 
     @Roles('admin', 'jefe', 'student')
-    @Get(':studentCode/:courseLecturer/:courseSchedule/:courseSeason/:courseStartTerm')
+    @Get(':studentCode/:courseId')
     findCourseOfStudent( @Param('studentCode') studentCode,
-    @Param('courseLecturer') courseLecturer,
-    @Param('courseSchedule') courseSchedule,
-    @Param('courseSeason') courseSeason,
-    @Param('courseStartTerm') courseStartTerm){
-        return this.studentCoursesService.findCourseOfStudent(studentCode,courseLecturer,courseSchedule,courseSeason,courseStartTerm)
+    @Param('courseId') courseId){
+        return this.studentCoursesService.findCourseOfStudent(studentCode,courseId)
 
     }
 
@@ -41,26 +38,20 @@ export class StudentCoursesController{
     }
 
     @Roles('admin', 'jefe')
-    @Get(':courseLecturer/:courseSchedule/:courseSeason/:courseStartTerm')
+    @Get(':courseId')
     findCourseStudents(
-    @Param('courseLecturer') courseLecturer,
-    @Param('courseSchedule') courseSchedule,
-    @Param('courseSeason') courseSeason,
-    @Param('courseStartTerm') courseStartTerm){
-        return this.studentCoursesService.findCourseStudents(courseLecturer,courseSchedule,courseSeason,courseStartTerm)
-
+    @Param('courseId') courseId,
+    ){
+        return this.studentCoursesService.findCourseStudents(courseId)
     }
 
     @Roles('admin', 'jefe')
-    @Delete(':studentCode/:courseLecturer/:courseSchedule/:courseSeason/:courseStartTerm')
+    @Delete(':studentCode/:courseId')
     delete(
         @Param('studentCode') studentCode,
-        @Param('courseLecturer') courseLecturer,
-        @Param('courseSchedule') courseSchedule,
-        @Param('courseSeason') courseSeason,
-        @Param('courseStartTerm') courseStartTerm
+        @Param('courseId') courseId,
     ){
-        return this.studentCoursesService.delete(studentCode,courseLecturer,courseSchedule,courseSeason,courseStartTerm)
+        return this.studentCoursesService.delete(studentCode,courseId)
     }
 
 

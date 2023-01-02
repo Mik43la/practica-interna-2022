@@ -49,7 +49,7 @@ model CareerOfUser {
 }
 
 model Course {
-  id Int @default(autoincrement())
+  id Int @default(autoincrement()) @id
   name String
   startTerm Int
   endTerm Int
@@ -63,7 +63,7 @@ model Course {
   season Season @relation(fields: [seasonName], references: [name] , onDelete: Cascade, onUpdate: Cascade )
 
   studentCourses StudentCourses[]
-   @@id([lecturer,schedule,startTerm, seasonName]) 
+  
 
   
   @@map("courses")
@@ -73,14 +73,11 @@ model Course {
 
 
 model CareersForCourse {
-  courseLecturer String
-  courseSchedule String
-  courseSeason String
-  courseStartTerm Int
-  Course       Course     @relation(fields: [courseLecturer, courseSchedule, courseStartTerm, courseSeason], references: [lecturer,schedule,startTerm, seasonName], onDelete: Cascade , onUpdate: Cascade )
+  courseId Int
+  Course       Course     @relation(fields: [courseId], references: [id], onDelete: Cascade , onUpdate: Cascade )
   careerId Int
   Career   Career @relation(fields: [careerId], references: [id], onDelete: Cascade, onUpdate: Cascade )
-  @@id([courseLecturer, courseSchedule, courseStartTerm, courseSeason, careerId])
+  @@id([courseId, careerId])
 
   
   @@map("careers_for_course")
@@ -88,13 +85,10 @@ model CareersForCourse {
 
 model StudentCourses {
   studentCode String
-  courseLecturer String
-  courseSchedule String
-  courseSeason String
-  courseStartTerm Int
-  Course Course @relation(fields: [courseLecturer, courseSchedule,courseStartTerm, courseSeason], references: [lecturer,schedule,startTerm,seasonName], onDelete: Cascade, onUpdate: Cascade )
+  courseId Int
+  Course Course @relation(fields: [courseId], references: [id], onDelete: Cascade, onUpdate: Cascade )
   Student User @relation(fields: [studentCode], references: [code], onUpdate: Cascade )
-  @@id([studentCode,courseLecturer,courseSchedule,courseStartTerm,courseSeason])
+  @@id([studentCode,courseId])
 
   @@map("student_courses")
 }

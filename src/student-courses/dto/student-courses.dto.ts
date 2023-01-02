@@ -8,22 +8,8 @@ export class StudentCoursesDto {
     studentCode: string
 
     @IsNotEmpty()
-    @IsString()
-    courseLecturer: string
-
-    @IsNotEmpty()
-    @IsString()
-    courseSchedule: string
-
-    @IsNotEmpty()
-    @IsString()
-    courseSeason: string
-
-    @IsNotEmpty()
     @Type(() => Number)
     @IsNumber()
-    @Min(1)
-    @Max(12)
     @IsInt()
-    courseStartTerm:number
+    courseId:number
 }

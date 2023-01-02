@@ -23,12 +23,10 @@ export class CareersForCourseController{
     }
 
     @Roles('admin', 'jefe')
-    @Get(':courseLecturer/:courseSchedule/:courseStartTerm/:courseSeason')
-    findAllCareersOfOneCourse(@Param('courseLecturer') courseLecturer,
-    @Param('courseSchedule') courseSchedule,
-    @Param('courseStartTerm') courseStartTerm,
-    @Param('courseSeason' ) courseSeason,){
-        return this.careerForCourseService.findAllCareersOfOneCourse(courseLecturer, courseSchedule, courseStartTerm, courseSeason)
+    @Get(':courseId')
+    findAllCareersOfOneCourse(@Param('courseId') courseId,
+   ){
+        return this.careerForCourseService.findAllCareersOfOneCourse(courseId)
     }
 
     @Roles('admin', 'jefe')
@@ -38,15 +36,12 @@ export class CareersForCourseController{
     }
 
     @Roles('admin', 'jefe')
-    @Delete(':courseLecturer/:courseSchedule/:courseStartTerm/:courseSeason/:careerId')
+    @Delete(':courseId/:careerId')
     delete(
-        @Param('courseLecturer') courseLecturer,
-        @Param('courseSchedule') courseSchedule,
-        @Param('courseStartTerm') courseStartTerm,
-        @Param('courseSeason' ) courseSeason,
+        @Param('courseId') courseId,
         @Param('careerId') careerId
         ) {
-            return this.careerForCourseService.delete(courseLecturer, courseSchedule, courseStartTerm, courseSeason, careerId)
+            return this.careerForCourseService.delete(courseId, careerId)
         }
 
 

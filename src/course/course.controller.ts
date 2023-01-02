@@ -17,9 +17,9 @@ export class CourseController{
     }
 
     @Roles('admin', 'jefe')
-    @Put('update/:lecturer/:schedule/:startTerm/:season') 
-    update(@Param('lecturer') lecturer, @Param('schedule') schedule, @Param('startTerm') term, @Param('season') season,@Body() dto:CourseDto){
-        return this.courseService.update(lecturer, schedule, term, season, dto)
+    @Put('update/:id') 
+    update(@Param('id') id,@Body() dto:CourseDto){
+        return this.courseService.update(id, dto)
     }
 
     @Roles('admin', 'jefe')
@@ -29,14 +29,14 @@ export class CourseController{
     }
 
     @Roles('admin', 'jefe', 'student')
-    @Get(':lecturer/:schedule/:startTerm/:season')
-    find(@Param('lecturer') lecturer, @Param('schedule') schedule, @Param('startTerm') term,@Param('season') season,) {
-        return this.courseService.find(lecturer, schedule, term, season)
+    @Get(':id')
+    find(@Param('id') id) {
+        return this.courseService.find(id)
     }
 
     @Roles('admin', 'jefe')
-    @Delete(':lecturer/:schedule/:startTerm/:season')
-    delete(@Param('lecturer') lecturer, @Param('schedule') schedule, @Param('startTerm') term, @Param('season') season,) {
-        return this.courseService.delete(lecturer, schedule, term,season)
+    @Delete(':id')
+    delete(@Param('id') id) {
+        return this.courseService.delete(id)
     }
 }

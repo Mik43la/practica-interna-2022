@@ -1,6 +1,5 @@
 import { ForbiddenException, Injectable } from "@nestjs/common";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime";
-import { create } from "domain";
 import { PrismaService } from "src/prisma/prisma.service";
 import { StudentCoursesDto } from "./dto";
 
@@ -13,10 +12,7 @@ export class StudentCoursesService{
                 await this.prisma.studentCourses.create({
                     data: {
                         studentCode: dto.studentCode,
-                        courseLecturer: dto.courseLecturer,
-                        courseSchedule: dto.courseSchedule,
-                        courseSeason: dto.courseSeason,
-                        courseStartTerm: dto.courseStartTerm
+                        courseId: parseInt(dto.courseId.toString())
                     },
                 });
                 return studentCourse;
@@ -36,14 +32,11 @@ export class StudentCoursesService{
         return this.prisma.studentCourses.findMany({})
     }
 
-    findCourseOfStudent(code:string,lecturer:string, schedule:string, season:string, term:number){
+    findCourseOfStudent(code:string, idData: number,){
         return this.prisma.studentCourses.findFirst({
             where: {
                 studentCode:code,
-                courseLecturer: lecturer,
-                courseSchedule:schedule,
-                courseSeason:season,
-                courseStartTerm:parseInt(term.toString())
+                courseId: parseInt(idData.toString())
             }
         })
     }
@@ -56,28 +49,22 @@ export class StudentCoursesService{
         })
     }
 
-    findCourseStudents(lecturer:string, schedule:string, season:string, term:number){
+    findCourseStudents(idData: number,){
         return this.prisma.studentCourses.findMany({
             where:{
-                courseLecturer: lecturer,
-                courseSchedule:schedule,
-                courseSeason:season,
-                courseStartTerm:parseInt(term.toString())
+                courseId: parseInt(idData.toString())
             }
         })
 
     }
 
 
-    async delete(code:string,lecturer:string, schedule:string, season:string, term:number){
+    async delete(code:string,idData: number,){
         const studentCourse = 
         await this.prisma.studentCourses.findMany({
             where: {
                 studentCode:code,
-                courseLecturer: lecturer,
-                courseSchedule:schedule,
-                courseSeason:season,
-                courseStartTerm:parseInt(term.toString())
+                courseId: parseInt(idData.toString())
             },
         });
 
@@ -90,10 +77,7 @@ export class StudentCoursesService{
         return this.prisma.studentCourses.deleteMany({
             where:{
                 studentCode:code,
-                courseLecturer: lecturer,
-                courseSchedule:schedule,
-                courseSeason:season,
-                courseStartTerm:parseInt(term.toString())
+                courseId: parseInt(idData.toString())
             }
 
         })

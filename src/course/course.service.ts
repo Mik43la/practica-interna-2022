@@ -39,14 +39,11 @@ export class CourseService{
 
     }
     
-    async update(lecturerData:string, scheduleData:string, termData: number, seasonData:string, dto: CourseDto) {
+    async update(idData: number, dto: CourseDto) {
         const course = 
         await this.prisma.course.findFirst({
             where: {
-                lecturer: lecturerData,
-                schedule: scheduleData,
-                startTerm: parseInt(termData.toString()),
-                seasonName: seasonData,
+                id: parseInt(idData.toString())
                 
             },
         });
@@ -62,10 +59,7 @@ export class CourseService{
         
     return this.prisma.course.updateMany({
         where: { 
-            schedule: scheduleData,
-            lecturer: lecturerData,
-            startTerm: parseInt(termData.toString()),
-            seasonName: seasonData,
+            id: parseInt(idData.toString())
         },
         data: {
             name: dto.name,
@@ -84,25 +78,19 @@ export class CourseService{
         return this.prisma.course.findMany({});
     }
 
-    find(lecturerData:string, scheduleData:string, termData: number, seasonData:string,){
+    find(idData: number){
         return this.prisma.course.findFirst({
             where: {
-                lecturer: lecturerData,
-                schedule: scheduleData,
-                startTerm: parseInt(termData.toString()),
-                seasonName: seasonData,
+                id: parseInt(idData.toString())
             },
         });
     }
 
-    async delete(lecturerData:string, scheduleData:string, termData: number,seasonData:string,){
+    async delete(idData: number,){
         const course = 
         await this.prisma.course.findMany({
             where: {
-                lecturer: lecturerData,
-                schedule: scheduleData,
-                startTerm: parseInt(termData.toString()),
-                seasonName: seasonData,
+                id: parseInt(idData.toString())
             },
         });
 
@@ -117,10 +105,7 @@ export class CourseService{
     
         return this.prisma.course.deleteMany({
         where: {
-            lecturer: lecturerData, 
-            schedule: scheduleData,
-            startTerm: parseInt(termData.toString()),
-            seasonName: seasonData,
+            id: parseInt(idData.toString())
         },
       });
 
