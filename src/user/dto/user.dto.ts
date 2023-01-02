@@ -6,8 +6,7 @@ export class UserDto {
     @IsString()
     username: string;
 
-    @IsNotEmpty()
-    @IsEmail()
+    
     email: string;
 
     @IsNotEmpty()
